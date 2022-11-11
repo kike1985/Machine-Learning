@@ -4,8 +4,7 @@ import pickle
 import pandas as pd
 
 from models.boston_model import BostonModel
-from models.my_keras_regressor import MyKerasRegressor
-from models.my_sklearn_regressor import MySklearnRegressor
+from models.my_transformed_target_regressor import MyTransformedTargetRegressor
 
 
 def init():
@@ -17,7 +16,7 @@ def init():
         open('FastAPI_REST/estimators/0101_sklearn_model.pkl', 'rb'))
 
     global boston_keras_model
-    boston_keras_model = MyKerasRegressor.load(
+    boston_keras_model = MyTransformedTargetRegressor.load(
         'FastAPI_REST/estimators/0101_keras_model')
 
 
