@@ -3,8 +3,10 @@ import uvicorn
 import pickle
 import pandas as pd
 
-from models.boston_model import BostonModel
 from models.my_transformed_target_regressor import MyTransformedTargetRegressor
+from models.my_transformed_target_classifier import MyTransformedTargetClassifier
+from models.boston_model import BostonModel
+from models.iris_model import IrisModel
 
 
 def init():
@@ -18,6 +20,14 @@ def init():
     global boston_keras_model
     boston_keras_model = MyTransformedTargetRegressor.load(
         'FastAPI_REST/estimators/0101_keras_model')
+
+    global iris_sklearn_model
+    iris_sklearn_model = pickle.load(
+        open('FastAPI_REST/estimators/0201_sklearn_model.pkl', 'rb'))
+
+    global iris_keras_model
+    iris_keras_model = MyTransformedTargetClassifier.load(
+        'FastAPI_REST/estimators/0201_keras_model')
 
 
 init()
@@ -34,6 +44,16 @@ def boston(data: BostonModel):
 
     sklearn_pred = boston_sklearn_model.predict(X=df)
     keras_pred = boston_keras_model.predict(X=df)
+
+    return {'sklearn_pred': sklearn_pred.item(), 'keras_pred': keras_pred.item()}
+
+
+@app.post('/api/iris')
+def boston(data: IrisModel):
+    df = pd.DataFrame(data=data.dict(), index=[0])
+
+    sklearn_pred = iris_sklearn_model.predict(X=df)
+    keras_pred = iris_keras_model.predict(X=df)
 
     return {'sklearn_pred': sklearn_pred.item(), 'keras_pred': keras_pred.item()}
 
