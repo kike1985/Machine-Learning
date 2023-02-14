@@ -11,6 +11,7 @@ from resources.my_transformed_target_classifier import MyTransformedTargetClassi
 
 from resources._0101_Regression_Boston.boston_model import BostonModel
 from resources._0103_Regression_Vehicles_Price.vehicle_model import VehicleModel
+from resources._0201_Classification_Iris.iris_model import IrisModel
 
 BostonOutlierTransformer = dill.load(
     open('resources/_0101_Regression_Boston/outlier_transformer', 'rb'))
@@ -25,6 +26,13 @@ VehiclesImputeTransformer = dill.load(
     open('resources/_0103_Regression_Vehicles_Price/impute_transformer', 'rb'))
 VehiclesDataTransformer = dill.load(
     open('resources/_0103_Regression_Vehicles_Price/data_transformer', 'rb'))
+
+IrisOutlierTransformer = dill.load(
+    open('resources/_0201_Classification_Iris/outlier_transformer', 'rb'))
+IrisImputeTransformer = dill.load(
+    open('resources/_0201_Classification_Iris/impute_transformer', 'rb'))
+IrisDataTransformer = dill.load(
+    open('resources/_0201_Classification_Iris/data_transformer', 'rb'))
 
 
 def init():
@@ -47,13 +55,13 @@ def init():
     vehicle_keras_model = MyTransformedTargetRegressor.load(
         'resources/_0103_Regression_Vehicles_Price/keras_model')
 
-    # global iris_sklearn_model
-    # iris_sklearn_model = pickle.load(
-    #     open('estimators/0201_sklearn_model.pkl', 'rb'))
+    global iris_sklearn_model
+    iris_sklearn_model = pickle.load(
+        open('resources/_0201_Classification_Iris/sklearn_model.pkl', 'rb'))
 
-    # global iris_keras_model
-    # iris_keras_model = MyTransformedTargetClassifier.load(
-    #     'estimators/0201_keras_model')
+    global iris_keras_model
+    iris_keras_model = MyTransformedTargetClassifier.load(
+        'resources/_0201_Classification_Iris/keras_model')
 
 
 init()
@@ -84,14 +92,14 @@ def vehicle(data: VehicleModel):
     return {'sklearn_pred': sklearn_pred.item(), 'keras_pred': keras_pred.item()}
 
 
-# @app.post('/api/iris')
-# def iris(data: IrisModel):
-#     df = pd.DataFrame(data=data.dict(), index=[0])
+@app.post('/api/iris')
+def iris(data: IrisModel):
+    df = pd.DataFrame(data=data.dict(), index=[0])
 
-#     sklearn_pred = iris_sklearn_model.predict(X=df)
-#     keras_pred = iris_keras_model.predict(X=df)
+    sklearn_pred = iris_sklearn_model.predict(X=df)
+    keras_pred = iris_keras_model.predict(X=df)
 
-#     return {'sklearn_pred': sklearn_pred.item(), 'keras_pred': keras_pred.item()}
+    return {'sklearn_pred': sklearn_pred.item(), 'keras_pred': keras_pred.item()}
 
 
 # -------------------------------------------------------------
