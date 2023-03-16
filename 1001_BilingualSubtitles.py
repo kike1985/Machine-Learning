@@ -36,7 +36,7 @@ def build_thread(path, progress):
                         t_text = '<font color="#D900D9">' + translator.translate(t_text) + '</font>\n'
                     except Exception as e:
                         progress.remove_task(bar)
-                        return
+                        raise e
                     else:
                         text_out.insert(i+new_lines-2, t_text)
                         new_lines += 1
@@ -60,4 +60,6 @@ with ThreadPoolExecutor(max_workers=6) as executor:
 
     executor.shutdown(wait=True)
     progress.stop()
+
+    print('Errors:', [e.exception() for e in futures if e.exception() != None])
     print('Finish!!!')
