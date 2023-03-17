@@ -22,7 +22,7 @@ def build_thread(path, progress):
 
     text_out, new_lines = [], 0
 
-    bar = progress.add_task(f'[red]thread {threading.get_ident()} [{path[:50]}] [{len(text_in)} items]', 
+    bar = progress.add_task(f'[red]thread {threading.get_ident()} [{path[:50]}] [{len(text_in)} items]',
                             total=len(text_in))
 
     for i, text in enumerate(text_in):
