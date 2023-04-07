@@ -5,7 +5,6 @@ from concurrent.futures import ThreadPoolExecutor
 from rich.progress import Progress
 import threading
 
-
 time_pattern = "[0-9]{2}\:[0-9]{2}\:[0-9]{2}\,[0-9]{3}\ --> [0-9]{2}\:[0-9]{2}\:[0-9]{2}\,[0-9]{3}"
 
 base_path = 'Notebooks/1001_BilingualSubtitles/resources'
@@ -17,7 +16,7 @@ def build_thread(path, progress):
 
     translator = GoogleTranslator(source='en', target='es')
 
-    with open(f'{base_path}/in/{path}', 'r') as file_in:
+    with open(file=f'{base_path}/in/{path}', mode='r', encoding='utf-8') as file_in:
         text_in = file_in.readlines()
 
     text_out, new_lines = [], 0
@@ -46,7 +45,7 @@ def build_thread(path, progress):
         text_out.append(text)
         progress.update(bar, advance=1)
 
-    with open(f'{base_path}/out/{path}', 'w', encoding='utf-8') as file_out:
+    with open(file=f'{base_path}/out/{path}', mode='w', encoding='utf-8') as file_out:
         file_out.writelines(text_out)
 
     progress.remove_task(bar)
